@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Boutons cliquables avec redirection</title>
+  <style>
+    body {
+      background-image: url('chemin/vers/image.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    button {
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 18px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    a {
+      text-decoration: none;
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <a href="{{ url_for('index') }}"><button>Enregistrement vocal</button></a>
+  <a href="{{ url_for('choi') }}"><button>Vocal to texte</button></a>
+</body>
+</html>

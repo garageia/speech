@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  
+  <style>
+    body {
+      background-image: url('https://static.vecteezy.com/ti/vecteur-libre/p1/18878226-microphone-radio-et-onde-sonore-podcast-enregistrement-vocal-concert-en-ligne-icone-de-concept-d-enregistrement-en-studio-vectoriel.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+    
+    .record-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #fff;
+      font-family: Arial, sans-serif;
+    }
+
+    .record-btn {
+      background-color: #eee;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .record-btn:hover {
+      background-color: #ddd;
+    }
+
+    .record-status {
+      font-size: 16px;
+    }
+
+    .fa-microphone {
+      color: #555;
+      font-size: 24px;
+    }
+
+    .fa-stop {
+      color: #f00;
+    }
+
+    audio {
+      margin-top: 10px;
+      width: 100%;
+      max-width: 400px;
+    }
+  </style>
+</head>
+<body>
+  <div class="record-container">
+    <button id="record-btn" class="record-btn" onclick="toggleRecording()">
+      <i id="record-icon" class="fas fa-microphone"></i>
+    </button>
+    <span id="record-status" class="record-status">Prêt à enregistrer</span>
+    <audio id="record-audio" controls></audio>
+  </div>
+
+  <script>
+    // JavaScript code goes here...
+    let isRecording = false;
+let recorder;
+let audioElement = document.getElementById('record-audio');
+let recordBtn = document.getElementById('record-btn');
+let recordIcon = document.getElementById('record-icon');
+let recordStatus = document.getElementById('record-status');
+
+function toggleRecording() {
+  if (isRecording) {
+    stopRecording();
+  } else {
+    startRecording();
+  }
+}
+
+function startRecording() {
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(function(stream) {
+      recorder = new MediaRecorder(stream);
+      let chunks = [];
+
+      recorder.ondataavailable = function(e) {
+        chunks.push(e.data);
+      };
+
+      recorder.onstop = function() {
+        let blob = new Blob(chunks, { type: 'audio/mp3' });
+        chunks = [];
+        audioElement.src = URL.createObjectURL(blob);
+        audioElement.controls = true;
+        recordIcon.classList.remove('fa-stop');
+        recordIcon.classList.add('fa-microphone');
+        recordStatus.textContent = 'Enregistrement terminé';
+      };
+
+      recorder.start();
+      isRecording = true;
+      recordIcon.classList.remove('fa-microphone');
+      recordIcon.classList.add('fa-stop');
+      recordStatus.textContent = 'Enregistrement en cours...';
+    })
+    .catch(function(err) {
+      console.error('Erreur lors de l\'accès au microphone', err);
+    });
+}
+
+function stopRecording() {
+  recorder.stop();
+  isRecording = false;
+}
+
+  </script>
+</body>
+</html>
